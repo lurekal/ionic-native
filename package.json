@@ -23,6 +23,7 @@
     "prettier": "prettier --write \"**/*.{js,json,css,scss,less,md,ts,html,component.html}\""
   },
   "dependencies": {
+    "@ionic-native/core": "^5.32.0",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
