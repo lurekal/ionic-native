@@ -52,15 +52,40 @@ import { Observable } from 'rxjs';
 })
 @Injectable()
 export class SamsungKeyStoreSDK extends IonicNativePlugin {
-  /**
-   * This function does something
-   * @param message {string} Some param to configure something
-   * @param index {number} Another param to configure something
-   * @return {Promise<any>} Returns a promise that resolves when something happens
-   */
-
-  @Cordova({})
-  coolMethod(message: string, index: number): Promise<any> {
+  @Cordova()
+  getInstance(): Promise<any> {
+    return;
+  }
+  @Cordova()
+  getKeystoreApiLevel(): Promise<any> {
+    return;
+  }
+  @Cordova()
+  checkMandatoryAppUpdate(): Promise<any> {
+    return;
+  }
+  @Cordova()
+  getSeedHash(): Promise<any> {
+    return;
+  }
+  @Cordova()
+  getAddress(index: number): Promise<any> {
+    return;
+  }
+  @Cordova()
+  getPublicKey(index: number): Promise<any> {
+    return;
+  }
+  @Cordova()
+  signTransaction(rawTransaction: any, addressIndex: number): Promise<any> {
+    return;
+  }
+  @Cordova()
+  signPersonalMessage(message: string, addressIndex: number): Promise<any> {
+    return;
+  }
+  @Cordova()
+  linkSDK(urlcode: number): Promise<any> {
     return;
   }
 }

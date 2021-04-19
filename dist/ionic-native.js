@@ -104,7 +104,7 @@
 /* unused harmony export cordovaWarn */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return wrap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return wrapInstance; });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
 
 var ERR_CORDOVA_NOT_AVAILABLE = { error: 'cordova_not_available' };
@@ -581,21 +581,215 @@ var config = {
 "use strict";
 
 // EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* reexport */ ionic_native_plugin_IonicNativePlugin; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ cordova; });
+
+// UNUSED EXPORTS: checkAvailability, instanceAvailability, wrap, getPromise, cordovaFunctionOverride, cordovaInstance, cordovaPropertyGet, cordovaPropertySet, instancePropertyGet, instancePropertySet
+
+// EXTERNAL MODULE: ./dist/@ionic-native/core/bootstrap.js
+var bootstrap = __webpack_require__(11);
+
+// EXTERNAL MODULE: ./dist/@ionic-native/core/decorators/common.js
+var common = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./dist/@ionic-native/core/util.js
+/**
+ * @private
+ */
+function get(element, path) {
+    var paths = path.split('.');
+    var obj = element;
+    for (var i = 0; i < paths.length; i++) {
+        if (!obj) {
+            return null;
+        }
+        obj = obj[paths[i]];
+    }
+    return obj;
+}
+/**
+ * @private
+ */
+function getPromise(callback) {
+    if (callback === void 0) { callback = function () { }; }
+    var tryNativePromise = function () {
+        if (typeof Promise === 'function' || (typeof window !== 'undefined' && window.Promise)) {
+            return new Promise(function (resolve, reject) {
+                callback(resolve, reject);
+            });
+        }
+        else {
+            console.error('No Promise support or polyfill found. To enable Ionic Native support, please add the es6-promise polyfill before this script, or run with a library like Angular or on a recent browser.');
+        }
+    };
+    return tryNativePromise();
+}
+//# sourceMappingURL=util.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/ionic-native-plugin.js
+
+
+var ionic_native_plugin_IonicNativePlugin = /** @class */ (function () {
+    function IonicNativePlugin() {
+    }
+    /**
+     * Returns a boolean that indicates whether the plugin is installed
+     * @return {boolean}
+     */
+    IonicNativePlugin.installed = function () {
+        var isAvailable = Object(common["a" /* checkAvailability */])(this.pluginRef) === true;
+        return isAvailable;
+    };
+    /**
+     * Returns the original plugin object
+     */
+    IonicNativePlugin.getPlugin = function () {
+        if (typeof window !== 'undefined') {
+            return get(window, this.pluginRef);
+        }
+        return null;
+    };
+    /**
+     * Returns the plugin's name
+     */
+    IonicNativePlugin.getPluginName = function () {
+        var pluginName = this.pluginName;
+        return pluginName;
+    };
+    /**
+     * Returns the plugin's reference
+     */
+    IonicNativePlugin.getPluginRef = function () {
+        var pluginRef = this.pluginRef;
+        return pluginRef;
+    };
+    /**
+     * Returns the plugin's install name
+     */
+    IonicNativePlugin.getPluginInstallName = function () {
+        var plugin = this.plugin;
+        return plugin;
+    };
+    /**
+     * Returns the plugin's supported platforms
+     */
+    IonicNativePlugin.getSupportedPlatforms = function () {
+        var platform = this.platforms;
+        return platform;
+    };
+    IonicNativePlugin.pluginName = '';
+    IonicNativePlugin.pluginRef = '';
+    IonicNativePlugin.plugin = '';
+    IonicNativePlugin.repo = '';
+    IonicNativePlugin.platforms = [];
+    IonicNativePlugin.install = '';
+    return IonicNativePlugin;
+}());
+
+//# sourceMappingURL=ionic-native-plugin.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova.js
+
+function cordova(pluginObj, methodName, config, args) {
+    return Object(common["c" /* wrap */])(pluginObj, methodName, config).apply(this, args);
+}
+//# sourceMappingURL=cordova.js.map
+// EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Observable.js + 5 modules
+var Observable = __webpack_require__(10);
+
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-function-override.js
+
+
+function overrideFunction(pluginObj, methodName) {
+    return new Observable["a" /* Observable */](function (observer) {
+        var availabilityCheck = Object(common["a" /* checkAvailability */])(pluginObj, methodName);
+        if (availabilityCheck === true) {
+            var pluginInstance_1 = Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef());
+            pluginInstance_1[methodName] = observer.next.bind(observer);
+            return function () { return (pluginInstance_1[methodName] = function () { }); };
+        }
+        else {
+            observer.error(availabilityCheck);
+            observer.complete();
+        }
+    });
+}
+function cordovaFunctionOverride(pluginObj, methodName, args) {
+    if (args === void 0) { args = []; }
+    return overrideFunction(pluginObj, methodName);
+}
+//# sourceMappingURL=cordova-function-override.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-instance.js
+
+function cordovaInstance(pluginObj, methodName, config, args) {
+    args = Array.from(args);
+    return Object(common["d" /* wrapInstance */])(pluginObj, methodName, config).apply(this, args);
+}
+//# sourceMappingURL=cordova-instance.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-property.js
+
+function cordovaPropertyGet(pluginObj, key) {
+    if (Object(common["a" /* checkAvailability */])(pluginObj, key) === true) {
+        return Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef())[key];
+    }
+    return null;
+}
+function cordovaPropertySet(pluginObj, key, value) {
+    if (Object(common["a" /* checkAvailability */])(pluginObj, key) === true) {
+        Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef())[key] = value;
+    }
+}
+//# sourceMappingURL=cordova-property.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/instance-property.js
+function instancePropertyGet(pluginObj, key) {
+    if (pluginObj._objectInstance && pluginObj._objectInstance[key]) {
+        return pluginObj._objectInstance[key];
+    }
+    return null;
+}
+function instancePropertySet(pluginObj, key, value) {
+    if (pluginObj._objectInstance) {
+        pluginObj._objectInstance[key] = value;
+    }
+}
+//# sourceMappingURL=instance-property.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/interfaces.js
+
+//# sourceMappingURL=interfaces.js.map
+// CONCATENATED MODULE: ./dist/@ionic-native/core/index.js
+
+
+// Decorators
+
+
+
+
+
+
+
+Object(bootstrap["checkReady"])();
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ Subscriber_Subscriber; });
 
 // UNUSED EXPORTS: SafeSubscriber
 
 // EXTERNAL MODULE: ./node_modules/rxjs/node_modules/tslib/tslib.es6.js
-var tslib_es6 = __webpack_require__(6);
+var tslib_es6 = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/util/isFunction.js
-var isFunction = __webpack_require__(3);
+var isFunction = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Observer.js
-var Observer = __webpack_require__(5);
+var Observer = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/util/isArray.js
-var isArray = __webpack_require__(8);
+var isArray = __webpack_require__(9);
 
 // CONCATENATED MODULE: ./node_modules/rxjs/_esm5/internal/util/isObject.js
 /** PURE_IMPORTS_START  PURE_IMPORTS_END */
@@ -764,13 +958,13 @@ function flattenUnsubscriptionErrors(errors) {
 //# sourceMappingURL=Subscription.js.map
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/symbol/rxSubscriber.js
-var rxSubscriber = __webpack_require__(7);
+var rxSubscriber = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/config.js
 var config = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/util/hostReportError.js
-var hostReportError = __webpack_require__(4);
+var hostReportError = __webpack_require__(5);
 
 // CONCATENATED MODULE: ./node_modules/rxjs/_esm5/internal/Subscriber.js
 /** PURE_IMPORTS_START tslib,_util_isFunction,_Observer,_Subscription,_internal_symbol_rxSubscriber,_config,_util_hostReportError PURE_IMPORTS_END */
@@ -1009,7 +1203,7 @@ var Subscriber_SafeSubscriber = /*@__PURE__*/ (function (_super) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1022,7 +1216,7 @@ function isFunction(x) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1035,13 +1229,13 @@ function hostReportError(err) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return empty; });
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _util_hostReportError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _util_hostReportError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 /** PURE_IMPORTS_START _config,_util_hostReportError PURE_IMPORTS_END */
 
 
@@ -1062,7 +1256,7 @@ var empty = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1310,7 +1504,7 @@ function __classPrivateFieldSet(receiver, privateMap, value) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1327,7 +1521,7 @@ var $$rxSubscriber = rxSubscriber;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1338,7 +1532,7 @@ var isArray = /*@__PURE__*/ (function () { return Array.isArray || (function (x)
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1347,7 +1541,7 @@ var isArray = /*@__PURE__*/ (function () { return Array.isArray || (function (x)
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ Observable_Observable; });
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Subscriber.js + 3 modules
-var Subscriber = __webpack_require__(2);
+var Subscriber = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./node_modules/rxjs/_esm5/internal/util/canReportError.js
 /** PURE_IMPORTS_START _Subscriber PURE_IMPORTS_END */
@@ -1370,10 +1564,10 @@ function canReportError(observer) {
 //# sourceMappingURL=canReportError.js.map
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/symbol/rxSubscriber.js
-var rxSubscriber = __webpack_require__(7);
+var rxSubscriber = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Observer.js
-var Observer = __webpack_require__(5);
+var Observer = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./node_modules/rxjs/_esm5/internal/util/toSubscriber.js
 /** PURE_IMPORTS_START _Subscriber,_symbol_rxSubscriber,_Observer PURE_IMPORTS_END */
@@ -1554,7 +1748,7 @@ function getPromiseCtor(promiseCtor) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1583,200 +1777,6 @@ function checkReady() {
 }
 //# sourceMappingURL=bootstrap.js.map
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(12)))
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* reexport */ ionic_native_plugin_IonicNativePlugin; });
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ cordova; });
-
-// UNUSED EXPORTS: checkAvailability, instanceAvailability, wrap, getPromise, cordovaFunctionOverride, cordovaInstance, cordovaPropertyGet, cordovaPropertySet, instancePropertyGet, instancePropertySet
-
-// EXTERNAL MODULE: ./dist/@ionic-native/core/bootstrap.js
-var bootstrap = __webpack_require__(10);
-
-// EXTERNAL MODULE: ./dist/@ionic-native/core/decorators/common.js
-var common = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./dist/@ionic-native/core/util.js
-/**
- * @private
- */
-function get(element, path) {
-    var paths = path.split('.');
-    var obj = element;
-    for (var i = 0; i < paths.length; i++) {
-        if (!obj) {
-            return null;
-        }
-        obj = obj[paths[i]];
-    }
-    return obj;
-}
-/**
- * @private
- */
-function getPromise(callback) {
-    if (callback === void 0) { callback = function () { }; }
-    var tryNativePromise = function () {
-        if (typeof Promise === 'function' || (typeof window !== 'undefined' && window.Promise)) {
-            return new Promise(function (resolve, reject) {
-                callback(resolve, reject);
-            });
-        }
-        else {
-            console.error('No Promise support or polyfill found. To enable Ionic Native support, please add the es6-promise polyfill before this script, or run with a library like Angular or on a recent browser.');
-        }
-    };
-    return tryNativePromise();
-}
-//# sourceMappingURL=util.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/ionic-native-plugin.js
-
-
-var ionic_native_plugin_IonicNativePlugin = /** @class */ (function () {
-    function IonicNativePlugin() {
-    }
-    /**
-     * Returns a boolean that indicates whether the plugin is installed
-     * @return {boolean}
-     */
-    IonicNativePlugin.installed = function () {
-        var isAvailable = Object(common["a" /* checkAvailability */])(this.pluginRef) === true;
-        return isAvailable;
-    };
-    /**
-     * Returns the original plugin object
-     */
-    IonicNativePlugin.getPlugin = function () {
-        if (typeof window !== 'undefined') {
-            return get(window, this.pluginRef);
-        }
-        return null;
-    };
-    /**
-     * Returns the plugin's name
-     */
-    IonicNativePlugin.getPluginName = function () {
-        var pluginName = this.pluginName;
-        return pluginName;
-    };
-    /**
-     * Returns the plugin's reference
-     */
-    IonicNativePlugin.getPluginRef = function () {
-        var pluginRef = this.pluginRef;
-        return pluginRef;
-    };
-    /**
-     * Returns the plugin's install name
-     */
-    IonicNativePlugin.getPluginInstallName = function () {
-        var plugin = this.plugin;
-        return plugin;
-    };
-    /**
-     * Returns the plugin's supported platforms
-     */
-    IonicNativePlugin.getSupportedPlatforms = function () {
-        var platform = this.platforms;
-        return platform;
-    };
-    IonicNativePlugin.pluginName = '';
-    IonicNativePlugin.pluginRef = '';
-    IonicNativePlugin.plugin = '';
-    IonicNativePlugin.repo = '';
-    IonicNativePlugin.platforms = [];
-    IonicNativePlugin.install = '';
-    return IonicNativePlugin;
-}());
-
-//# sourceMappingURL=ionic-native-plugin.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova.js
-
-function cordova(pluginObj, methodName, config, args) {
-    return Object(common["c" /* wrap */])(pluginObj, methodName, config).apply(this, args);
-}
-//# sourceMappingURL=cordova.js.map
-// EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Observable.js + 5 modules
-var Observable = __webpack_require__(9);
-
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-function-override.js
-
-
-function overrideFunction(pluginObj, methodName) {
-    return new Observable["a" /* Observable */](function (observer) {
-        var availabilityCheck = Object(common["a" /* checkAvailability */])(pluginObj, methodName);
-        if (availabilityCheck === true) {
-            var pluginInstance_1 = Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef());
-            pluginInstance_1[methodName] = observer.next.bind(observer);
-            return function () { return (pluginInstance_1[methodName] = function () { }); };
-        }
-        else {
-            observer.error(availabilityCheck);
-            observer.complete();
-        }
-    });
-}
-function cordovaFunctionOverride(pluginObj, methodName, args) {
-    if (args === void 0) { args = []; }
-    return overrideFunction(pluginObj, methodName);
-}
-//# sourceMappingURL=cordova-function-override.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-instance.js
-
-function cordovaInstance(pluginObj, methodName, config, args) {
-    args = Array.from(args);
-    return Object(common["d" /* wrapInstance */])(pluginObj, methodName, config).apply(this, args);
-}
-//# sourceMappingURL=cordova-instance.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/cordova-property.js
-
-function cordovaPropertyGet(pluginObj, key) {
-    if (Object(common["a" /* checkAvailability */])(pluginObj, key) === true) {
-        return Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef())[key];
-    }
-    return null;
-}
-function cordovaPropertySet(pluginObj, key, value) {
-    if (Object(common["a" /* checkAvailability */])(pluginObj, key) === true) {
-        Object(common["b" /* getPlugin */])(pluginObj.constructor.getPluginRef())[key] = value;
-    }
-}
-//# sourceMappingURL=cordova-property.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/instance-property.js
-function instancePropertyGet(pluginObj, key) {
-    if (pluginObj._objectInstance && pluginObj._objectInstance[key]) {
-        return pluginObj._objectInstance[key];
-    }
-    return null;
-}
-function instancePropertySet(pluginObj, key, value) {
-    if (pluginObj._objectInstance) {
-        pluginObj._objectInstance[key] = value;
-    }
-}
-//# sourceMappingURL=instance-property.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/decorators/interfaces.js
-
-//# sourceMappingURL=interfaces.js.map
-// CONCATENATED MODULE: ./dist/@ionic-native/core/index.js
-
-
-// Decorators
-
-
-
-
-
-
-
-Object(bootstrap["checkReady"])();
-//# sourceMappingURL=index.js.map
 
 /***/ }),
 /* 12 */
@@ -1974,7 +1974,7 @@ process.umask = function() { return 0; };
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(__extends) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SamsungKeyStoreSDK; });
-/* harmony import */ var _ionic_native_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _ionic_native_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 
 var SamsungKeyStoreSDKOriginal = /** @class */ (function (_super) {
@@ -1982,7 +1982,24 @@ var SamsungKeyStoreSDKOriginal = /** @class */ (function (_super) {
     function SamsungKeyStoreSDKOriginal() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SamsungKeyStoreSDKOriginal.prototype.coolMethod = function (message, index) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "coolMethod", {}, arguments); };
+    SamsungKeyStoreSDKOriginal.prototype.getInstance = function () { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "getInstance", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.getKeystoreApiLevel = function () { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "getKeystoreApiLevel", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.checkMandatoryAppUpdate = function () { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "checkMandatoryAppUpdate", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.getSeedHash = function () { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "getSeedHash", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.getAddress = function (index) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "getAddress", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.getPublicKey = function (index) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "getPublicKey", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.signTransaction = function (rawTransaction, addressIndex) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "signTransaction", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.signPersonalMessage = function (message, addressIndex) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "signPersonalMessage", {}, arguments); };
+    ;
+    SamsungKeyStoreSDKOriginal.prototype.linkSDK = function (urlcode) { return Object(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* cordova */ "b"])(this, "linkSDK", {}, arguments); };
+    ;
     SamsungKeyStoreSDKOriginal.pluginName = "cordova-plugin-skeystoresdk";
     SamsungKeyStoreSDKOriginal.plugin = "cordova-plugin-skeystoresdk";
     SamsungKeyStoreSDKOriginal.pluginRef = "cordova.plugins.SKeystoreSDK";
@@ -1994,7 +2011,7 @@ var SamsungKeyStoreSDKOriginal = /** @class */ (function (_super) {
 }(_ionic_native_core__WEBPACK_IMPORTED_MODULE_0__[/* IonicNativePlugin */ "a"]));
 var SamsungKeyStoreSDK = new SamsungKeyStoreSDKOriginal();
 
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL2lvbmljLW5hdGl2ZS1zYW1zdW5na2V5c3RvcmVzZGsvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7OztBQVlBLE9BQU8sOEJBQTBGLE1BQU0sb0JBQW9CLENBQUM7O0lBa0NwRixzQ0FBaUI7Ozs7SUFXdkQsdUNBQVUsYUFBRSxPQUFlLEVBQUUsS0FBYTs7Ozs7Ozs7NkJBekQ1QztFQThDd0MsaUJBQWlCO1NBQTVDLGtCQUFrQiIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogVGhpcyBpcyBhIHRlbXBsYXRlIGZvciBuZXcgcGx1Z2luIHdyYXBwZXJzXG4gKlxuICogVE9ETzpcbiAqIC0gQWRkL0NoYW5nZSBpbmZvcm1hdGlvbiBiZWxvd1xuICogLSBEb2N1bWVudCB1c2FnZSAoaW1wb3J0aW5nLCBleGVjdXRpbmcgbWFpbiBmdW5jdGlvbmFsaXR5KVxuICogLSBSZW1vdmUgYW55IGltcG9ydHMgdGhhdCB5b3UgYXJlIG5vdCB1c2luZ1xuICogLSBSZW1vdmUgYWxsIHRoZSBjb21tZW50cyBpbmNsdWRlZCBpbiB0aGlzIHRlbXBsYXRlLCBFWENFUFQgdGhlIEBQbHVnaW4gd3JhcHBlciBkb2NzIGFuZCBhbnkgb3RoZXIgZG9jcyB5b3UgYWRkZWRcbiAqIC0gUmVtb3ZlIHRoaXMgbm90ZVxuICpcbiAqL1xuaW1wb3J0IHsgSW5qZWN0YWJsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHsgUGx1Z2luLCBDb3Jkb3ZhLCBDb3Jkb3ZhUHJvcGVydHksIENvcmRvdmFJbnN0YW5jZSwgSW5zdGFuY2VQcm9wZXJ0eSwgSW9uaWNOYXRpdmVQbHVnaW4gfSBmcm9tICdAaW9uaWMtbmF0aXZlL2NvcmUnO1xuaW1wb3J0IHsgT2JzZXJ2YWJsZSB9IGZyb20gJ3J4anMnO1xuXG4vKipcbiAqIEBuYW1lIEBpb25pYy1uYXRpdmUvc2Ftc3VuZ2tleXN0b3Jlc2RrXG4gKiBAZGVzY3JpcHRpb25cbiAqIFRoaXMgcGx1Z2luIGRvZXMgc29tZXRoaW5nXG4gKlxuICogQHVzYWdlXG4gKiBgYGB0eXBlc2NyaXB0XG4gKiBpbXBvcnQgeyBAaW9uaWMtbmF0aXZlL3NhbXN1bmdrZXlzdG9yZXNkayB9IGZyb20gJ0Bpb25pYy1uYXRpdmUvaW9uaWMtbmF0aXZlLXNhbXN1bmdrZXlzdG9yZXNkayc7XG4gKlxuICpcbiAqIGNvbnN0cnVjdG9yKHByaXZhdGUgQGlvbmljLW5hdGl2ZS9zYW1zdW5na2V5c3RvcmVzZGs6IEBpb25pYy1uYXRpdmUvc2Ftc3VuZ2tleXN0b3Jlc2RrKSB7IH1cbiAqXG4gKiAuLi5cbiAqXG4gKlxuICogdGhpcy5AaW9uaWMtbmF0aXZlL3NhbXN1bmdrZXlzdG9yZXNkay5mdW5jdGlvbk5hbWUoJ0hlbGxvJywgMTIzKVxuICogICAudGhlbigocmVzOiBhbnkpID0+IGNvbnNvbGUubG9nKHJlcykpXG4gKiAgIC5jYXRjaCgoZXJyb3I6IGFueSkgPT4gY29uc29sZS5lcnJvcihlcnJvcikpO1xuICpcbiAqIGBgYFxuICovXG5AUGx1Z2luKHtcbiAgcGx1Z2luTmFtZTogJ2NvcmRvdmEtcGx1Z2luLXNrZXlzdG9yZXNkaycsXG4gIHBsdWdpbjogJ2NvcmRvdmEtcGx1Z2luLXNrZXlzdG9yZXNkaycsIC8vIG5wbSBwYWNrYWdlIG5hbWUsIGV4YW1wbGU6IGNvcmRvdmEtcGx1Z2luLWNhbWVyYVxuICBwbHVnaW5SZWY6ICdjb3Jkb3ZhLnBsdWdpbnMuU0tleXN0b3JlU0RLJywgLy8gdGhlIHZhcmlhYmxlIHJlZmVyZW5jZSB0byBjYWxsIHRoZSBwbHVnaW4sIGV4YW1wbGU6IG5hdmlnYXRvci5nZW9sb2NhdGlvblxuICByZXBvOiAnJywgLy8gdGhlIGdpdGh1YiByZXBvc2l0b3J5IFVSTCBmb3IgdGhlIHBsdWdpblxuICBpbnN0YWxsOiAnJywgLy8gT1BUSU9OQUwgaW5zdGFsbCBjb21tYW5kLCBpbiBjYXNlIHRoZSBwbHVnaW4gcmVxdWlyZXMgdmFyaWFibGVzXG4gIGluc3RhbGxWYXJpYWJsZXM6IFtdLCAvLyBPUFRJT05BTCB0aGUgcGx1Z2luIHJlcXVpcmVzIHZhcmlhYmxlc1xuICBwbGF0Zm9ybXM6IFsnQW5kcm9pZCddIC8vIEFycmF5IG9mIHBsYXRmb3JtcyBzdXBwb3J0ZWQsIGV4YW1wbGU6IFsnQW5kcm9pZCcsICdpT1MnXVxufSlcbkBJbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBTYW1zdW5nS2V5U3RvcmVTREsgZXh0ZW5kcyBJb25pY05hdGl2ZVBsdWdpbiB7XG5cbiAgLyoqXG4gICAqIFRoaXMgZnVuY3Rpb24gZG9lcyBzb21ldGhpbmdcbiAgICogQHBhcmFtIG1lc3NhZ2Uge3N0cmluZ30gU29tZSBwYXJhbSB0byBjb25maWd1cmUgc29tZXRoaW5nXG4gICAqIEBwYXJhbSBpbmRleCB7bnVtYmVyfSBBbm90aGVyIHBhcmFtIHRvIGNvbmZpZ3VyZSBzb21ldGhpbmdcbiAgICogQHJldHVybiB7UHJvbWlzZTxhbnk+fSBSZXR1cm5zIGEgcHJvbWlzZSB0aGF0IHJlc29sdmVzIHdoZW4gc29tZXRoaW5nIGhhcHBlbnNcbiAgICovXG5cblxuICBAQ29yZG92YSh7fSlcbiAgY29vbE1ldGhvZCggbWVzc2FnZTogc3RyaW5nLCBpbmRleDogbnVtYmVyKTogUHJvbWlzZTxhbnk+IHtcbiAgICByZXR1cm47XG4gIH1cbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL2lvbmljLW5hdGl2ZS1zYW1zdW5na2V5c3RvcmVzZGsvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7OztBQVlBLE9BQU8sOEJBT04sTUFBTSxvQkFBb0IsQ0FBQzs7SUFrQ1ksc0NBQWlCOzs7O0lBSXZELHdDQUFXO0lBQXlCLENBQUM7SUFFckMsZ0RBQW1CO0lBQXlCLENBQUM7SUFFN0Msb0RBQXVCO0lBQXlCLENBQUM7SUFFakQsd0NBQVc7SUFBeUIsQ0FBQztJQUVyQyx1Q0FBVSxhQUFDLEtBQWE7SUFBd0IsQ0FBQztJQUVqRCx5Q0FBWSxhQUFDLEtBQWE7SUFBd0IsQ0FBQztJQUVuRCw0Q0FBZSxhQUFDLGNBQW1CLEVBQUUsWUFBb0I7SUFBd0IsQ0FBQztJQUVsRixnREFBbUIsYUFBQyxPQUFlLEVBQUUsWUFBb0I7SUFBd0IsQ0FBQztJQUVsRixvQ0FBTyxhQUFDLE9BQWU7SUFBd0IsQ0FBQzs7Ozs7Ozs7NkJBekVsRDtFQXFEd0MsaUJBQWlCO1NBQTVDLGtCQUFrQiIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogVGhpcyBpcyBhIHRlbXBsYXRlIGZvciBuZXcgcGx1Z2luIHdyYXBwZXJzXG4gKlxuICogVE9ETzpcbiAqIC0gQWRkL0NoYW5nZSBpbmZvcm1hdGlvbiBiZWxvd1xuICogLSBEb2N1bWVudCB1c2FnZSAoaW1wb3J0aW5nLCBleGVjdXRpbmcgbWFpbiBmdW5jdGlvbmFsaXR5KVxuICogLSBSZW1vdmUgYW55IGltcG9ydHMgdGhhdCB5b3UgYXJlIG5vdCB1c2luZ1xuICogLSBSZW1vdmUgYWxsIHRoZSBjb21tZW50cyBpbmNsdWRlZCBpbiB0aGlzIHRlbXBsYXRlLCBFWENFUFQgdGhlIEBQbHVnaW4gd3JhcHBlciBkb2NzIGFuZCBhbnkgb3RoZXIgZG9jcyB5b3UgYWRkZWRcbiAqIC0gUmVtb3ZlIHRoaXMgbm90ZVxuICpcbiAqL1xuaW1wb3J0IHsgSW5qZWN0YWJsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHtcbiAgUGx1Z2luLFxuICBDb3Jkb3ZhLFxuICBDb3Jkb3ZhUHJvcGVydHksXG4gIENvcmRvdmFJbnN0YW5jZSxcbiAgSW5zdGFuY2VQcm9wZXJ0eSxcbiAgSW9uaWNOYXRpdmVQbHVnaW4sXG59IGZyb20gJ0Bpb25pYy1uYXRpdmUvY29yZSc7XG5pbXBvcnQgeyBPYnNlcnZhYmxlIH0gZnJvbSAncnhqcyc7XG5cbi8qKlxuICogQG5hbWUgQGlvbmljLW5hdGl2ZS9zYW1zdW5na2V5c3RvcmVzZGtcbiAqIEBkZXNjcmlwdGlvblxuICogVGhpcyBwbHVnaW4gZG9lcyBzb21ldGhpbmdcbiAqXG4gKiBAdXNhZ2VcbiAqIGBgYHR5cGVzY3JpcHRcbiAqIGltcG9ydCB7IEBpb25pYy1uYXRpdmUvc2Ftc3VuZ2tleXN0b3Jlc2RrIH0gZnJvbSAnQGlvbmljLW5hdGl2ZS9pb25pYy1uYXRpdmUtc2Ftc3VuZ2tleXN0b3Jlc2RrJztcbiAqXG4gKlxuICogY29uc3RydWN0b3IocHJpdmF0ZSBAaW9uaWMtbmF0aXZlL3NhbXN1bmdrZXlzdG9yZXNkazogQGlvbmljLW5hdGl2ZS9zYW1zdW5na2V5c3RvcmVzZGspIHsgfVxuICpcbiAqIC4uLlxuICpcbiAqXG4gKiB0aGlzLkBpb25pYy1uYXRpdmUvc2Ftc3VuZ2tleXN0b3Jlc2RrLmZ1bmN0aW9uTmFtZSgnSGVsbG8nLCAxMjMpXG4gKiAgIC50aGVuKChyZXM6IGFueSkgPT4gY29uc29sZS5sb2cocmVzKSlcbiAqICAgLmNhdGNoKChlcnJvcjogYW55KSA9PiBjb25zb2xlLmVycm9yKGVycm9yKSk7XG4gKlxuICogYGBgXG4gKi9cbkBQbHVnaW4oe1xuICBwbHVnaW5OYW1lOiAnY29yZG92YS1wbHVnaW4tc2tleXN0b3Jlc2RrJyxcbiAgcGx1Z2luOiAnY29yZG92YS1wbHVnaW4tc2tleXN0b3Jlc2RrJywgLy8gbnBtIHBhY2thZ2UgbmFtZSwgZXhhbXBsZTogY29yZG92YS1wbHVnaW4tY2FtZXJhXG4gIHBsdWdpblJlZjogJ2NvcmRvdmEucGx1Z2lucy5TS2V5c3RvcmVTREsnLCAvLyB0aGUgdmFyaWFibGUgcmVmZXJlbmNlIHRvIGNhbGwgdGhlIHBsdWdpbiwgZXhhbXBsZTogbmF2aWdhdG9yLmdlb2xvY2F0aW9uXG4gIHJlcG86ICcnLCAvLyB0aGUgZ2l0aHViIHJlcG9zaXRvcnkgVVJMIGZvciB0aGUgcGx1Z2luXG4gIGluc3RhbGw6ICcnLCAvLyBPUFRJT05BTCBpbnN0YWxsIGNvbW1hbmQsIGluIGNhc2UgdGhlIHBsdWdpbiByZXF1aXJlcyB2YXJpYWJsZXNcbiAgaW5zdGFsbFZhcmlhYmxlczogW10sIC8vIE9QVElPTkFMIHRoZSBwbHVnaW4gcmVxdWlyZXMgdmFyaWFibGVzXG4gIHBsYXRmb3JtczogWydBbmRyb2lkJ10sIC8vIEFycmF5IG9mIHBsYXRmb3JtcyBzdXBwb3J0ZWQsIGV4YW1wbGU6IFsnQW5kcm9pZCcsICdpT1MnXVxufSlcbkBJbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBTYW1zdW5nS2V5U3RvcmVTREsgZXh0ZW5kcyBJb25pY05hdGl2ZVBsdWdpbiB7XG5cblxuICBAQ29yZG92YSgpXG4gIGdldEluc3RhbmNlKCk6IFByb21pc2U8YW55PntyZXR1cm47fTtcbiAgQENvcmRvdmEoKVxuICBnZXRLZXlzdG9yZUFwaUxldmVsKCk6IFByb21pc2U8YW55PntyZXR1cm47fTtcbiAgQENvcmRvdmEoKVxuICBjaGVja01hbmRhdG9yeUFwcFVwZGF0ZSgpOiBQcm9taXNlPGFueT57cmV0dXJuO307XG4gIEBDb3Jkb3ZhKClcbiAgZ2V0U2VlZEhhc2goKTogUHJvbWlzZTxhbnk+e3JldHVybjt9O1xuICBAQ29yZG92YSgpXG4gIGdldEFkZHJlc3MoaW5kZXg6IG51bWJlcik6IFByb21pc2U8YW55PntyZXR1cm47fTtcbiAgQENvcmRvdmEoKVxuICBnZXRQdWJsaWNLZXkoaW5kZXg6IG51bWJlcik6IFByb21pc2U8YW55PntyZXR1cm47fTtcbiAgQENvcmRvdmEoKVxuICBzaWduVHJhbnNhY3Rpb24ocmF3VHJhbnNhY3Rpb246IGFueSwgYWRkcmVzc0luZGV4OiBudW1iZXIpOiBQcm9taXNlPGFueT57cmV0dXJuO307XG4gIEBDb3Jkb3ZhKClcbiAgc2lnblBlcnNvbmFsTWVzc2FnZShtZXNzYWdlOiBzdHJpbmcsIGFkZHJlc3NJbmRleDogbnVtYmVyKTogUHJvbWlzZTxhbnk+e3JldHVybjt9O1xuICBAQ29yZG92YSgpXG4gIGxpbmtTREsodXJsY29kZTogbnVtYmVyKTogUHJvbWlzZTxhbnk+e3JldHVybjt9O1xuXG5cblxuXG5cblxuXG59XG4iXX0=
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)["__extends"]))
 
 /***/ }),
@@ -2008,7 +2025,7 @@ __webpack_require__.r(__webpack_exports__);
 window.IonicNative = {
 SamsungKeyStoreSDK: _ionic_native_plugins_ionic_native_samsungkeystoresdk__WEBPACK_IMPORTED_MODULE_0__[/* SamsungKeyStoreSDK */ "a"]
 };
-__webpack_require__(10).checkReady();
+__webpack_require__(11).checkReady();
 __webpack_require__(17).initAngular1(window.IonicNative);
 
 /***/ }),
@@ -2321,19 +2338,19 @@ function initAngular1(plugins) {
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ fromEvent; });
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Observable.js + 5 modules
-var Observable = __webpack_require__(9);
+var Observable = __webpack_require__(10);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/util/isArray.js
-var isArray = __webpack_require__(8);
+var isArray = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/util/isFunction.js
-var isFunction = __webpack_require__(3);
+var isFunction = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/node_modules/tslib/tslib.es6.js
-var tslib_es6 = __webpack_require__(6);
+var tslib_es6 = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./node_modules/rxjs/_esm5/internal/Subscriber.js + 3 modules
-var Subscriber = __webpack_require__(2);
+var Subscriber = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./node_modules/rxjs/_esm5/internal/operators/map.js
 /** PURE_IMPORTS_START tslib,_Subscriber PURE_IMPORTS_END */

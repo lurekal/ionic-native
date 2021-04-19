@@ -11,7 +11,15 @@ var SamsungKeyStoreSDK = /** @class */ (function (_super) {
     function SamsungKeyStoreSDK() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SamsungKeyStoreSDK.prototype.coolMethod = function (message, index) { return core.cordova(this, "coolMethod", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.getInstance = function () { return core.cordova(this, "getInstance", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.getKeystoreApiLevel = function () { return core.cordova(this, "getKeystoreApiLevel", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.checkMandatoryAppUpdate = function () { return core.cordova(this, "checkMandatoryAppUpdate", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.getSeedHash = function () { return core.cordova(this, "getSeedHash", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.getAddress = function (index) { return core.cordova(this, "getAddress", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.getPublicKey = function (index) { return core.cordova(this, "getPublicKey", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.signTransaction = function (rawTransaction, addressIndex) { return core.cordova(this, "signTransaction", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.signPersonalMessage = function (message, addressIndex) { return core.cordova(this, "signPersonalMessage", {}, arguments); };
+    SamsungKeyStoreSDK.prototype.linkSDK = function (urlcode) { return core.cordova(this, "linkSDK", {}, arguments); };
     SamsungKeyStoreSDK.pluginName = "cordova-plugin-skeystoresdk";
     SamsungKeyStoreSDK.plugin = "cordova-plugin-skeystoresdk";
     SamsungKeyStoreSDK.pluginRef = "cordova.plugins.SKeystoreSDK";
